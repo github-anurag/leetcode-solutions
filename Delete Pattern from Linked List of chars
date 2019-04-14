@@ -1,0 +1,90 @@
+/*
+Delete given pattern from linked list
+*/
+class Node{
+    char val;
+    Node next;
+
+    public Node(char c){
+        val = c;
+        next = null;
+    }
+}
+class Solution{
+    public static Node buildList(char[] ch){
+        Node n = new Node('0');
+        Node head = n;
+        for(char c :ch){
+            Node temp = new Node(c);
+            n.next = temp;
+            n = n.next;
+        }
+        return head.next;
+    }
+
+    public static void printList(Node root){
+        Node curr = root;
+        while(curr != null){
+            System.out.print(curr.val + "->");
+            curr = curr.next;
+        }
+        System.out.print("X");
+        System.out.println();
+    }
+
+    public static Node matchDelete(Node head, char[] p){
+        if(head == null)
+            return null;
+        Node dummy = new Node('0');
+        Node r = dummy;
+        Node start = head;
+        Node end = head;
+        while(end != null){
+            if(end.val == p[0]){
+                int i = 0;
+                while(i < p.length && end != null && end.val == p[i]){
+                    ++i;
+                    end = end.next;
+                }
+                if(i == p.length){
+                    if(end == null){
+                        r.next = null;
+                        return dummy.next;
+                    }else{
+                        start = end;
+                    }
+                }else{
+                    while( start != null && start != end) {
+                        r.next = start;
+                        start = start.next;
+                        r = r.next;
+                        if(start != null && start.val == p[0]){
+                            end = start;
+                            break;
+                        }
+                    }
+                }
+            }else{
+                r.next = start;
+                start = start.next;
+                end = end.next;
+                r = r.next;
+            }
+        }
+        r.next = null;
+        return dummy.next;
+    }
+
+}
+public class MatchAndDelete {
+    public static void main(String args[]) {
+        char[] list = "111111111".toCharArray();
+        char[] pattern = "111111111".toCharArray();
+        System.out.println("List:-");
+        Node head = Solution.buildList(list);
+        Solution.printList(head);
+        System.out.println("Result:");
+        Node result = Solution.matchDelete(head,pattern);
+        Solution.printList(result);
+    }
+}
